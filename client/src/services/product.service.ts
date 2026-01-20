@@ -1,17 +1,23 @@
-import api from "./api";
+import useAxios from "../hooks/useAxios";
 import type { Product } from "../types/product.types";
 
-export const getProducts = async (): Promise<Product[]> => {
-  const res = await api.get("/products");
-  return res.data;
+const useProductService = () => {
+  const { axiosPrivate } = useAxios();
+
+  const createProduct = async (payload: Product) => {
+    const res = await axiosPrivate.post("/products", payload);
+    return res.data;
+  };
+
+  const getProductById = async (id: string): Promise<Product> => {
+    const res = await axiosPrivate.get(`/products/${id}`);
+    return res.data;
+  };
+
+  return {
+    createProduct,
+    getProductById,
+  };
 };
 
-export const createProduct = async (payload: Product) => {
-  const res = await api.post("/products", payload);
-  return res.data;
-};
-
-export const getProductById = async (id: string): Promise<Product> => {
-  const res = await api.get(`/products/${id}`);
-  return res.data;
-};
+export default useProductService;

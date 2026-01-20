@@ -1,23 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
-import { getProducts } from "../../services/product.service";
-import type { Product } from "../../types/product.types";
 import ProductsComponent from "../../components/products/ProductsComponent";
 import { formatCurrency } from "../../utils/currency";
 import ProductCard from "../../components/products/ProductCard";
+import useRefreshToken from "../../hooks/useRefreshToken";
+import useProducts from "../../hooks/useProducts";
 
 const Dashboard = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  useEffect(() => {
-    // Fetch products or other dashboard data here
-    try {
-      getProducts().then((data: Product[]) => {
-        setProducts(data);
-      });
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  }, []);
+  const { refresh } = useRefreshToken();
+  const products = useProducts();
 
   const topFavoriteProducts = useMemo(() => {
     return products.filter((product) => product.isFavorite).slice(0, 4);
@@ -62,6 +53,13 @@ const Dashboard = () => {
             value={totalInventory}
             bgColor="bg-danger"
           />
+        </div>
+      </div>
+      <div className="row mb-4">
+        <div className="col-12">
+          <button className="text-2xl font-bold mb-4" onClick={refresh}>
+            Refresh
+          </button>
         </div>
       </div>
       <div className="row mb-4">

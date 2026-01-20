@@ -3,14 +3,18 @@ import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
 
 import type { UserLogin } from "../../types/user.types";
-import { login } from "../../services/auth.service";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import InputField from "../../components/forms/InputField";
 import axios from "axios";
+import useAuthService from "../../services/auth.service";
 
 function Login() {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuthService();
+
+  const from = location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -25,7 +29,7 @@ function Login() {
       setErrorMsg("");
       setAuth({ isAuthenticated: true, token, user });
       console.log("Login successful:", token, user);
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErrorMsg(error?.response?.data?.message);

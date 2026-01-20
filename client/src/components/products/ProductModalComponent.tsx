@@ -3,15 +3,17 @@ import type { Product } from "../../types/product.types";
 import InputField from "../forms/InputField";
 import axios from "axios";
 import { useState } from "react";
-import { createProduct } from "../../services/product.service";
+import type { Dispatch, SetStateAction } from "react";
+import useProductService from "../../services/product.service";
 
 interface Props {
   setShowModal: (show: boolean) => void;
-  fetchProducts: () => void;
+  setReloadFlag?: Dispatch<SetStateAction<number>>;
 }
 
-function ProductModalComponent({ setShowModal, fetchProducts }: Props) {
+function ProductModalComponent({ setShowModal, setReloadFlag }: Props) {
   const [errorMsg, setErrorMsg] = useState("");
+  const { createProduct } = useProductService();
 
   const {
     register,
@@ -22,8 +24,11 @@ function ProductModalComponent({ setShowModal, fetchProducts }: Props) {
   const onSubmit = async (product: Product) => {
     try {
       await createProduct(product);
+      // trigger parent to refetch products if setter provided
+      if (setReloadFlag) {
+        setReloadFlag((v: number) => v + 1);
+      }
       setShowModal(false);
-      fetchProducts();
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {

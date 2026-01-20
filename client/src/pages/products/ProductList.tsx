@@ -1,29 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import ProductsComponent from "../../components/products/ProductsComponent";
 import type { Product } from "../../types/product.types";
 import FilterActionsComponent from "../../components/FilterActionsComponent";
-import { getProducts } from "../../services/product.service";
 import ProductModalComponent from "../../components/products/ProductModalComponent";
+import useProducts from "../../hooks/useProducts";
 
 function ProductList() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [filteredSortProducts, setFilteredSortProducts] =
-    useState<Product[]>(products);
+  const [reloadFlag, setReloadFlag] = useState(0);
+  const products: Product[] = useProducts(reloadFlag);
+  const [filteredSortProducts, setFilteredSortProducts] = useState<Product[]>(
+    []
+  );
   const [showModal, setShowModal] = useState(false);
+  console.log("Rendered ProductList");
 
-  const fetchProducts = async () => {
-    try {
-      const data = await getProducts();
-      setProducts(data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
+  // Keep filtered/sorted products in sync when products change
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchProducts();
-  }, []);
+    setFilteredSortProducts(products);
+  }, [products]);
 
   return (
     <>
@@ -49,7 +43,8 @@ function ProductList() {
       {showModal && (
         <ProductModalComponent
           setShowModal={setShowModal}
-          fetchProducts={fetchProducts}
+          // increment reloadFlag to force useProducts to refetch
+          setReloadFlag={setReloadFlag}
         />
       )}
     </>

@@ -3,12 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 import type { Product } from "../../types/product.types";
-import { getProductById } from "../../services/product.service";
 import { formatCurrency } from "../../utils/currency";
+import useProductService from "../../services/product.service";
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  const { getProductById } = useProductService();
 
   console.log("Product ID from params:", id, product);
 

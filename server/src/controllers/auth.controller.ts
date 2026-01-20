@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 
 import User from "../models/user.model";
-import { generateAccessToken } from "../utils/token";
+import {
+  decodeAccessToken,
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/token";
 
 export const signUp = async (req: Request, res: Response) => {
   console.log("SignUp request body:", req);
@@ -47,11 +52,29 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = generateAccessToken(user);
+    const accessToken = generateAccessToken({
+      userId: user._id.toString(),
+      role: user.role,
+      name: user.name,
+    });
+
+    const refreshToken = generateRefreshToken({
+      userId: user._id.toString(),
+      role: user.role,
+      name: user.name,
+    });
+
+    // Set refresh token in httpOnly cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
     res.status(200).json({
       message: "Login successful",
-      token,
+      token: accessToken,
       user: { name: user.name, email: user.email, role: user.role },
     });
   } catch (error) {
@@ -61,6 +84,38 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response) => {
-  // Since JWT is stateless, logout can be handled on the client side by deleting the token.
+  // Clear refresh token cookie
+  res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });
   res.status(200).json({ message: "Logout successful" });
+};
+
+export const refreshToken = async (req: Request, res: Response) => {
+  console.log("Refresh token request received");
+  try {
+    // Read refresh token from cookie
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token missing" });
+    }
+
+    const decoded = verifyRefreshToken(refreshToken) as any;
+    if (!decoded) {
+      // Refresh token invalid or expired
+      res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });
+      return res
+        .status(403)
+        .json({ message: "Refresh token invalid or expired" });
+    }
+
+    const newAccessToken = generateAccessToken({
+      userId: decoded.userId,
+      role: decoded.role,
+      name: decoded.name,
+    });
+
+    return res.status(200).json({ token: newAccessToken });
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

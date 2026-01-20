@@ -4,10 +4,12 @@ import { FaUser } from "react-icons/fa";
 
 import AuthContext from "../../context/AuthProvider";
 import NavItemsContext from "../../context/NavItemsProvider";
+import useAuthService from "../../services/auth.service";
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
+  const { logout } = useAuthService();
 
   const { navItem, setNavItem } = useContext(NavItemsContext);
 
@@ -19,10 +21,10 @@ function Header() {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Handle login/logout click
+  const handleLogout = async () => {
     if (auth?.isAuthenticated) {
       // Perform logout actions
+      await logout();
       setAuth({ isAuthenticated: false, token: "", user: null });
       setNavItem("home");
       navigate("/login");

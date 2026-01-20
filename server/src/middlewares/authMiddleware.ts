@@ -14,19 +14,24 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.get("Authorization");
   if (!authHeader) {
     return next();
   }
 
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.JWT_SECRET!, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({ message: "Forbidden" });
-    }
-    req.user = decoded;
-    next();
-  });
+
+  if (!token) {
+    return res.status(401).json({ message: "Token missing" });
+  }
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET!);
+    return next();
+  } catch (error: any) {
+    console.error(error.status, error.message);
+    res.status(403).json({ message: "Forbidden" });
+  }
 };
 
 export const isAuthenticated = (

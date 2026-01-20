@@ -2,15 +2,16 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import type { User } from "../../types/user.types";
-import { signup } from "../../services/auth.service";
 import InputField from "../../components/forms/InputField";
 import SelectField from "../../components/forms/SelectField";
 import { useState } from "react";
 import axios from "axios";
+import useAuthService from "../../services/auth.service";
 
 function Signup() {
   const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
+  const { signup } = useAuthService();
   const {
     register,
     handleSubmit,
