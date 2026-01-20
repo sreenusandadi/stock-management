@@ -87,11 +87,13 @@ function Header() {
         <MdMenu
           size={50}
           className="d-block d-md-none"
+          style={{ cursor: "pointer" }}
           onClick={() => setShowNav(!showNav)}
         />
 
         <MdOutlineStorefront
           size={50}
+          style={{ cursor: "pointer" }}
           className="text-white d-none d-md-block"
           onClick={handleNavigation}
         />

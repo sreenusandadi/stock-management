@@ -6,6 +6,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import ProductList from "./pages/products/ProductList";
 import ProductDetails from "./pages/products/ProductDetails";
 import PersistLogin from "./components/PersistLogin";
+import Cart from "./pages/cart/Cart";
 
 const App = () => {
   return (
@@ -35,6 +36,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ProductDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart />
               </ProtectedRoute>
             }
           />

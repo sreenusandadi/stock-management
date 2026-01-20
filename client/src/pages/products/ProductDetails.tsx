@@ -109,7 +109,10 @@ function ProductDetails() {
         )}
       </div>
       <p className="mb-2">
-        <span className="fw-bold">Price:</span> {formatCurrency(product.price)}
+        <span className="fw-bold">Price:</span>{" "}
+        <span className="badge bg-primary">
+          {formatCurrency(product.price)}
+        </span>
       </p>
       <p className="mb-2">
         <span className="fw-bold">Description:</span> {product.description}

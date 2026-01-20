@@ -9,6 +9,7 @@ type Props = {
 };
 
 function NavItems({ items, navItem, setNavItem, setShowNav }: Props) {
+  const checkNavItem = navItem.includes("products") ? "/products" : navItem;
   return (
     <>
       {items.map((item) => (
@@ -16,7 +17,7 @@ function NavItems({ items, navItem, setNavItem, setShowNav }: Props) {
           key={item.name}
           to={item.path}
           className={`nav-item text-white text-decoration-none ${
-            item.path === navItem ? "fw-bold" : ""
+            item.path === checkNavItem ? "fw-bold" : ""
           }`}
           onClick={() => {
             setNavItem(item.path);
