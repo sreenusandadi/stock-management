@@ -8,7 +8,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const token_1 = require("../utils/token");
 const signUp = async (req, res) => {
-    console.log("SignUp request body:", req);
     const { name, email, password, role } = req.body;
     const existingUser = await user_model_1.default.findOne({ email });
     if (existingUser) {
@@ -83,7 +82,6 @@ const logout = async (req, res) => {
 };
 exports.logout = logout;
 const refreshToken = async (req, res) => {
-    console.log("Refresh token request received");
     try {
         // Read refresh token from cookie
         const refreshToken = req.cookies?.refreshToken;
@@ -91,7 +89,6 @@ const refreshToken = async (req, res) => {
             return res.status(401).json({ message: "Refresh token missing" });
         }
         const decoded = (0, token_1.verifyRefreshToken)(refreshToken);
-        console.log("Decoded: ", decoded);
         if (!decoded) {
             // Refresh token invalid or expired
             res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });

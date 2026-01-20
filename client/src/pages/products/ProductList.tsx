@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ProductsComponent from "../../components/products/ProductsComponent";
 import type { Product } from "../../types/product.types";
 import FilterActionsComponent from "../../components/FilterActionsComponent";
 import ProductModalComponent from "../../components/products/ProductModalComponent";
 import useProducts from "../../hooks/useProducts";
+import AuthContext from "../../context/AuthProvider";
 
 function ProductList() {
   const [reloadFlag, setReloadFlag] = useState(0);
@@ -12,6 +13,9 @@ function ProductList() {
     [],
   );
   const [showModal, setShowModal] = useState(false);
+
+  const { auth } = useContext(AuthContext);
+  const isadmin = auth?.user?.role === "ADMIN";
 
   return (
     <div className="container my-4">
@@ -22,12 +26,14 @@ function ProductList() {
       ) : (
         <>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowModal(true)}
-            >
-              Add New Product
-            </button>
+            {isadmin && (
+              <button
+                className="btn btn-primary"
+                onClick={() => setShowModal(true)}
+              >
+                Add New Product
+              </button>
+            )}
             <FilterActionsComponent
               products={products}
               setFilteredSortProducts={setFilteredSortProducts}

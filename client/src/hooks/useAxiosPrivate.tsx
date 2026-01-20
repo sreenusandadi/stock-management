@@ -17,7 +17,7 @@ const useAxiosPrivate = () => {
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     const responseInterceptor = axiosPrivate.interceptors.response.use(
@@ -27,14 +27,13 @@ const useAxiosPrivate = () => {
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
           const newToken = await refresh();
-          console.log("Refreshed token:", newToken);
           if (newToken) {
             prevRequest.headers["Authorization"] = `Bearer ${newToken}`;
             return axiosPrivate(prevRequest);
           }
         }
         return Promise.reject(error);
-      }
+      },
     );
     return () => {
       axiosPrivate.interceptors.request.eject(requestInterceptor);

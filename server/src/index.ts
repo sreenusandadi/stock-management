@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import productRoutes from "./routes/product.routes";
 import authRoutes from "./routes/auth.routes";
+import userRouter from "./routes/user.routes";
 
 config();
 
@@ -17,11 +18,12 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use("/api", productRoutes);
 app.use("/api", authRoutes);
+app.use("/api", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

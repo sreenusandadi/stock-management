@@ -28,7 +28,6 @@ function Login() {
       const { token, user } = await login(data);
       setErrorMsg("");
       setAuth({ isAuthenticated: true, token, user });
-      console.log("Login successful:", token, user);
       navigate(from, { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {

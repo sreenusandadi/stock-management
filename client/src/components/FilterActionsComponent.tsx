@@ -49,7 +49,7 @@ function FilterActionsComponent({ products, setFilteredSortProducts }: Props) {
   }, [products, searchTerm, sortBy, favoriteOnly]);
 
   return (
-    <div className="d-flex flex-column flex-md-row gap-2 align-items-baseline">
+    <div className="d-flex flex-column flex-md-row gap-2 align-items-center ms-auto">
       <div className="">
         <input
           type="checkbox"

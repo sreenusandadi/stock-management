@@ -11,8 +11,6 @@ const PersistLogin = () => {
   const { setNavItem } = useContext(NavItemsContext);
   const location = useLocation();
 
-  console.log(location.pathname);
-
   useEffect(() => {
     const refreshToken = async () => {
       try {
@@ -34,7 +32,6 @@ const PersistLogin = () => {
 
   useEffect(() => {
     console.log(`IsLoading: ${isLoading}`);
-    console.log(`AT: ${JSON.stringify(auth)}`);
   }, [isLoading]);
 
   return isLoading ? <p>Loading...</p> : <Outlet />;

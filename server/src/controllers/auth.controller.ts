@@ -10,7 +10,6 @@ import {
 } from "../utils/token";
 
 export const signUp = async (req: Request, res: Response) => {
-  console.log("SignUp request body:", req);
   const { name, email, password, role } = req.body;
 
   const existingUser = await User.findOne({ email });
@@ -92,7 +91,6 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
-  console.log("Refresh token request received");
   try {
     // Read refresh token from cookie
     const refreshToken = req.cookies?.refreshToken;
@@ -101,7 +99,6 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     const decoded = verifyRefreshToken(refreshToken) as any;
-    console.log("Decoded: ", decoded);
     if (!decoded) {
       // Refresh token invalid or expired
       res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });

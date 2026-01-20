@@ -14,9 +14,21 @@ const useProductService = () => {
     return res.data;
   };
 
+  const updateProduct = async (id: string, payload: Product) => {
+    const res = await axiosPrivate.put(`/products/${id}`, payload);
+    return res.data;
+  };
+
+  const deleteProduct = async (id: string) => {
+    const res = await axiosPrivate.delete(`/products/${id}`);
+    return res.data;
+  };
+
   return {
     createProduct,
     getProductById,
+    updateProduct,
+    deleteProduct,
   };
 };
 

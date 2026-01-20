@@ -61,6 +61,7 @@ function Header() {
                 items={items}
                 navItem={navItem}
                 setNavItem={setNavItem}
+                setShowNav={setShowNav}
               />
               <div className="mt-auto pb-3 d-flex flex-column gap-3 fw-bold">
                 <hr className="text-secondary" />
@@ -69,7 +70,7 @@ function Header() {
                   <span className="text-nowrap">
                     {auth?.user?.name || "Guest"}
                   </span>{" "}
-                  ({auth?.user?.role.toLowerCase() || "User"})
+                  ({auth?.user?.role || "USER"})
                 </div>
                 <div className="text-nowrap">{auth?.user?.email}</div>
                 <div
@@ -91,7 +92,7 @@ function Header() {
 
         <MdOutlineStorefront
           size={50}
-          className="text-white"
+          className="text-white d-none d-md-block"
           onClick={handleNavigation}
         />
         <span className="text-dark fs-2 fs-sm-6 fs-lg-4 fw-bold">
@@ -102,11 +103,15 @@ function Header() {
       <div className="d-flex align-items-center gap-2">
         <div className="d-none d-md-flex">
           <div className="d-flex gap-3 me-4">
-            <NavItems items={items} navItem={navItem} setNavItem={setNavItem} />
+            <NavItems
+              items={items}
+              navItem={navItem}
+              setNavItem={setNavItem}
+              setShowNav={setShowNav}
+            />
           </div>
           <span>
-            Welcome {auth?.user?.name || "Guest"} (
-            {auth?.user?.role.toLowerCase() || "User"})
+            Welcome {auth?.user?.name || "Guest"} ({auth?.user?.role || "USER"})
           </span>
         </div>
         <>

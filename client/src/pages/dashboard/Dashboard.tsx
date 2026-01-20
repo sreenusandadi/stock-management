@@ -1,12 +1,16 @@
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 
 import ProductsComponent from "../../components/products/ProductsComponent";
 import { formatCurrency } from "../../utils/currency";
 import ProductCard from "../../components/products/ProductCard";
 import useProducts from "../../hooks/useProducts";
+import UserComponent from "../../components/users/UserComponent";
+import AuthContext from "../../context/AuthProvider";
 
 const Dashboard = () => {
   const { products, loading, error } = useProducts();
+  const { auth } = useContext(AuthContext);
+  const isadmin = auth?.user?.role === "ADMIN";
 
   const topFavoriteProducts = useMemo(() => {
     return products.filter((product) => product.isFavorite).slice(0, 4);
@@ -59,6 +63,11 @@ const Dashboard = () => {
               />
             </div>
           </div>
+          {isadmin && (
+            <div className="mb-4 row">
+              <UserComponent />
+            </div>
+          )}
           <div className="row mb-4">
             <div className="col-12 mb-4 d-flex flex-column gap-4">
               <ProductsComponent

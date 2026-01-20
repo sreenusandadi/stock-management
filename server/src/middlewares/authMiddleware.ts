@@ -12,7 +12,7 @@ declare global {
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const authHeader = req.get("Authorization");
   if (!authHeader) {
@@ -37,10 +37,23 @@ export const authMiddleware = (
 export const isAuthenticated = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+  next();
+};
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.user);
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  if (req.user.role !== "ADMIN") {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+
   next();
 };

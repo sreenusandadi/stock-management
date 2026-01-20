@@ -3,7 +3,6 @@ import MainLayout from "./pages/main-layout/MainLayout";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/auth/Login";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import Signup from "./pages/auth/Signup";
 import ProductList from "./pages/products/ProductList";
 import ProductDetails from "./pages/products/ProductDetails";
 import PersistLogin from "./components/PersistLogin";
@@ -43,7 +42,6 @@ const App = () => {
       </Route>
 
       <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
     </Routes>
   );
 };
