@@ -7,3 +7,8 @@ export interface Product {
   isFavorite: boolean;
   sales: number;
 }
+
+export interface NavItem {
+  name: string;
+  path: string;
+}

@@ -49,11 +49,13 @@ const login = async (req, res) => {
             userId: user._id.toString(),
             role: user.role,
             name: user.name,
+            email: user.email,
         });
         const refreshToken = (0, token_1.generateRefreshToken)({
             userId: user._id.toString(),
             role: user.role,
             name: user.name,
+            email: user.email,
         });
         // Set refresh token in httpOnly cookie
         res.cookie("refreshToken", refreshToken, {
@@ -89,6 +91,7 @@ const refreshToken = async (req, res) => {
             return res.status(401).json({ message: "Refresh token missing" });
         }
         const decoded = (0, token_1.verifyRefreshToken)(refreshToken);
+        console.log("Decoded: ", decoded);
         if (!decoded) {
             // Refresh token invalid or expired
             res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });
@@ -100,8 +103,12 @@ const refreshToken = async (req, res) => {
             userId: decoded.userId,
             role: decoded.role,
             name: decoded.name,
+            email: decoded.email,
         });
-        return res.status(200).json({ token: newAccessToken });
+        return res.status(200).json({
+            token: newAccessToken,
+            user: { name: decoded.name, email: decoded.email, role: decoded.role },
+        });
     }
     catch (error) {
         console.error("Error refreshing token:", error);

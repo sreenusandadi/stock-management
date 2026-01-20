@@ -56,12 +56,14 @@ export const login = async (req: Request, res: Response) => {
       userId: user._id.toString(),
       role: user.role,
       name: user.name,
+      email: user.email,
     });
 
     const refreshToken = generateRefreshToken({
       userId: user._id.toString(),
       role: user.role,
       name: user.name,
+      email: user.email,
     });
 
     // Set refresh token in httpOnly cookie
@@ -99,6 +101,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     const decoded = verifyRefreshToken(refreshToken) as any;
+    console.log("Decoded: ", decoded);
     if (!decoded) {
       // Refresh token invalid or expired
       res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax" });
@@ -111,9 +114,13 @@ export const refreshToken = async (req: Request, res: Response) => {
       userId: decoded.userId,
       role: decoded.role,
       name: decoded.name,
+      email: decoded.email,
     });
 
-    return res.status(200).json({ token: newAccessToken });
+    return res.status(200).json({
+      token: newAccessToken,
+      user: { name: decoded.name, email: decoded.email, role: decoded.role },
+    });
   } catch (error) {
     console.error("Error refreshing token:", error);
     res.status(500).json({ message: "Internal server error" });

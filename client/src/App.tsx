@@ -6,36 +6,40 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Signup from "./pages/auth/Signup";
 import ProductList from "./pages/products/ProductList";
 import ProductDetails from "./pages/products/ProductDetails";
+import PersistLogin from "./components/PersistLogin";
 
 const App = () => {
   return (
     <Routes>
       {/* Define your routes here */}
+
       <Route path="/" element={<MainLayout />}>
-        <Route
-          index
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products"
-          element={
-            <ProtectedRoute>
-              <ProductList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products/:id"
-          element={
-            <ProtectedRoute>
-              <ProductDetails />
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<PersistLogin />}>
+          <Route
+            index
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute>
+                <ProductList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:id"
+            element={
+              <ProtectedRoute>
+                <ProductDetails />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
       </Route>
 
       <Route path="/login" element={<Login />} />

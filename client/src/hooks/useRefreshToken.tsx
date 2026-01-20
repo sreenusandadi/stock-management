@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import useAxios from "./useAxios";
 import AuthContext from "../context/AuthProvider";
-import type { AuthState } from "./useAuth";
 
 const useRefreshToken = () => {
   const { setAuth, auth } = useContext(AuthContext);
@@ -16,9 +15,10 @@ const useRefreshToken = () => {
           Authorization: `Bearer ${auth?.token}`,
         },
       });
-      const { token } = response.data;
+      const { token, user } = response.data;
       setAuth({
-        ...(auth ?? ({} as AuthState)),
+        isAuthenticated: true,
+        user,
         token,
       });
       return token;

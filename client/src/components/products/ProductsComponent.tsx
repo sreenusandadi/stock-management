@@ -14,7 +14,7 @@ function ProductsComponent({ products, title, showMore }: Props) {
   const navigate = useNavigate();
   const { setNavItem } = useContext(NavItemsContext);
   const handleShowMore = () => {
-    setNavItem("products");
+    setNavItem("/products");
     if (title === "Favorite Products") {
       navigate("/products?isFavourite=true");
     } else {

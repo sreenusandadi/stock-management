@@ -25,7 +25,7 @@ function FilterActionsComponent({ products, setFilteredSortProducts }: Props) {
 
     if (searchTerm) {
       updatedProducts = updatedProducts.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -49,8 +49,8 @@ function FilterActionsComponent({ products, setFilteredSortProducts }: Props) {
   }, [products, searchTerm, sortBy, favoriteOnly]);
 
   return (
-    <div className="d-flex align-items-center gap-3 mb-4 justify-content-end">
-      <div>
+    <div className="d-flex flex-column flex-md-row gap-2 align-items-baseline">
+      <div className="">
         <input
           type="checkbox"
           id="favoriteOnly"
